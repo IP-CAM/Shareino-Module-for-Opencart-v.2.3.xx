@@ -94,7 +94,7 @@ class ControllerExtensionModuleShareino extends Controller
          * return to view
          */
         $this->destroyProducts();
-        $data['productIDs'] = $this->model_shareino_products->getAllIdes();
+        $data['countProduct'] = $this->model_shareino_products->getCount();
         $this->response->setOutput($this->load->view('extension/module/shareino.tpl', $data));
     }
 
@@ -110,15 +110,15 @@ class ControllerExtensionModuleShareino extends Controller
         /*
          * Send category to ShareINO
          */
-        if (isset($this->request->post['ids'])) {
+        if (isset($this->request->post['id'])) {
 
             $this->load->model('shareino/categories');
             $this->load->model('shareino/requset');
 
             $categories = $this->model_shareino_categories->getCategories();
-            $result = $this->model_shareino_requset->sendRequset("categories/sync", $categories, "POST");
+            $result = $this->model_shareino_requset->sendRequset('categories/sync', $categories, 'POST');
 
-            $this->response->setOutput($result);
+            $this->response->setOutput(json_encode($result));
         }
     }
 
@@ -128,33 +128,29 @@ class ControllerExtensionModuleShareino extends Controller
         if ($this->config->get('shareino_category') === '0') {
             $this->syncCategory();
         }
+
         /*
          * Send products to ShareINO
          */
-        if (isset($this->request->post['ids'])) {
+        if (isset($this->request->post['pageNumber'])) {
+
+            $pagenumber = $this->request->post['pageNumber'];
+            $limit = $this->request->post['split'];
 
             $this->response->addHeader('Content-Type: application/json');
 
             $this->load->model('shareino/products');
             $this->load->model('shareino/requset');
 
-            $products = $this->model_shareino_products->getAllProducts($this->request->post['ids'], 1);
-            $response = $this->model_shareino_requset->sendRequset("products", json_encode($products), "POST");
+            $products = $this->model_shareino_products->products($this->model_shareino_products->getIdes($limit, $pagenumber));
+            $response = $this->model_shareino_requset->sendRequset('products', json_encode($products), 'POST');
 
-            $this->response->setOutput($response);
+            $this->response->setOutput(json_encode($response));
         }
     }
 
     public function destroyProducts()
     {
-        $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "shareino_synchronize` (
-            `id` BIGINT NOT NULL AUTO_INCREMENT,
-            `product_id` BIGINT NOT NULL,
-            `date_sync` DATETIME NOT NULL,
-            `date_modified` DATETIME NOT NULL,
-             PRIMARY KEY(`id`),
-             UNIQUE(`product_id`));");
-
         //call list ids for delete
         $this->load->model('shareino/synchronize');
         $listDestroy = $this->model_shareino_synchronize->destroy();
