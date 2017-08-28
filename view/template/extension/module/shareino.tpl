@@ -192,7 +192,6 @@
                             }
                         } else {
                             setPercentage();
-                            pageNumber++;
                             SyncProducts();
                         }
                     },
@@ -201,6 +200,7 @@
                     }
                 });
             }
+            pageNumber++;
         }
 
         function setPercentage() {
