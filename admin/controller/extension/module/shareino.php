@@ -123,7 +123,7 @@ class ControllerExtensionModuleShareino extends Controller
         $website = $this->config->get('config_url') ?
             $this->config->get('config_url') : 'http://' . $_SERVER['SERVER_NAME'] . '/';
 
-        $data['shareino_token_frontend'] = '"' . $website . 'index.php?route=module/shareino&key=' . $this->config->get('shareino_token_frontend') . '"';
+        $data['shareino_token_frontend'] = '"' . $website . 'index.php?route=extension/module/shareino&key=' . $this->config->get('shareino_token_frontend') . '"';
         $this->response->setOutput($this->load->view('extension/module/shareino.tpl', $data));
     }
 
