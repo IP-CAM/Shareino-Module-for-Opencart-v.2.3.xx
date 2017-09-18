@@ -48,6 +48,23 @@
             <hr/>
             <div class="panel-body">
                 <div class="form-group">
+                    <form action="<?php echo $action; ?>" method="post" class="form-horizontal" id="shareino_out_of_stock" data-token="<?php echo $token ?>">
+                        <label class="col-sm-2 control-label" for="input-name">درصورت اتمام موجودی</label>
+                        <div class="col-sm-9">
+                            <select name="shareino_out_of_stock" class="form-control">
+                                <option value="0" <?php if($shareino_out_of_stock== 0) echo'selected';?>>رد سفارش</option>
+                                <option value="1" <?php if($shareino_out_of_stock== 1) echo'selected';?>>امکان ثبت سفارش</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="submit" class="btn btn-primary"><i id="state-icon-product" class="fa fa-save"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div> <!-- ./out of stock  -->
+            <hr/>
+            <div class="panel-body">
+                <div class="form-group">
                     <form action="<?php echo $action; ?>" method="post" class="form-horizontal sync-products" data-token="<?php echo $token ?>" data-operation="0">
                         <label class="col-sm-2 control-label" for="input-name">ارسال کالا ها</label>
                         <div class="col-sm-9">
@@ -95,7 +112,17 @@
                     </form>
                 </div>
             </div><!-- ./token  -->
-
+            <hr/>
+            <div class="panel-body">
+                <div class="form-group">
+                    <form action="<?php echo $action; ?>" method="post" class="form-horizontal shareino-form-token" id="shareino_api_token" data-token="<?php echo $token ?>">
+                        <label class="col-sm-2 control-label" for="input-name">دستور کرون جاب</label>
+                        <div class="col-sm-10">
+                            <input type="text"  dir="ltr" value='/usr/bin/wget -O - -q <?php echo $shareino_token_frontend ?>' class="form-control" readonly="true"/>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- ./token frontend  -->
             <div class="panel-footer"></div>
         </div>
     </div>
