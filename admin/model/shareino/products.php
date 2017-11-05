@@ -42,7 +42,13 @@ class ModelShareinoProducts extends Model
 
         $products = array();
         foreach ($ids as $id) {
-            $products[] = $this->getProductDetail($this->model_catalog_product->getProduct($id));
+            $result = $this->getProductDetail($this->model_catalog_product->getProduct($id));
+
+            if (empty($result)) {
+                continue;
+            }
+
+            $products[] = $result;
         }
 
         return $products;
@@ -51,7 +57,7 @@ class ModelShareinoProducts extends Model
     protected function getProductDetail($product)
     {
         if ($product == null) {
-            return array();
+            return null;
         }
 
         $this->load->model('setting/setting');
@@ -75,7 +81,7 @@ class ModelShareinoProducts extends Model
             foreach ($product_specials as $product_special) {
                 if (($product_special['date_start'] == '0000-00-00' || strtotime($product_special['date_start']) < time()) && ($product_special['date_end'] == '0000-00-00' || strtotime($product_special['date_end']) > time())) {
                     $listDiscounts[] = array(
-                        'amount' => $product['price'] - $product_special['price'],
+                        'amount' => max($product['price'] - $product_special['price'], 0),
                         'start_date' => $product_special['date_start'],
                         'end_date' => $product_special['date_end'],
                         'quantity' => 1,
@@ -90,7 +96,7 @@ class ModelShareinoProducts extends Model
 
                 if (($product_discount['date_start'] == '0000-00-00' || strtotime($product_discount['date_start']) < time()) && ($product_discount['date_end'] == '0000-00-00' || strtotime($product_discount['date_end']) > time())) {
                     $listDiscounts[] = array(
-                        'amount' => $product['price'] - $product_discount['price'],
+                        'amount' => max($product['price'] - $product_discount['price'], 0),
                         'start_date' => $product_discount['date_start'],
                         'end_date' => $product_discount['date_end'],
                         'quantity' => $product_discount['quantity'],

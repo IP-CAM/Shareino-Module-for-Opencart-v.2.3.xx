@@ -9,7 +9,13 @@ class ModelShareinoProducts extends Model
 
         $products = array();
         foreach ($ids as $id) {
-            $products[] = $this->getProductDetail($this->model_catalog_product->getProduct($id));
+            $result = $this->getProductDetail($this->model_catalog_product->getProduct($id));
+
+            if (empty($result)) {
+                continue;
+            }
+
+            $products[] = $result;
         }
         return $products;
     }
@@ -17,7 +23,7 @@ class ModelShareinoProducts extends Model
     protected function getProductDetail($product)
     {
         if ($product == null) {
-            return array();
+            return null;
         }
 
         $this->load->model('setting/setting');
