@@ -66,4 +66,27 @@ class ControllerExtensionModuleShareino extends Controller
         }, $array);
     }
 
+    public function status()
+    {
+        if ($this->checkActivePlugin()) {
+            echo json_encode(['status' => true], true);
+        } else {
+            echo json_encode(['status' => false], true);
+        }
+    }
+
+    private function checkActivePlugin()
+    {
+        $this->load->model('extension/extension');
+        $extensions = $this->model_extension_extension->getExtensions('module');
+
+        foreach ($extensions as $extension) {
+            if (is_array($extension) && $extension['code'] === 'shareino') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
