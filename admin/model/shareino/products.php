@@ -150,7 +150,7 @@ class ModelShareinoProducts extends Model
                     ),
                     'code' => $productId,
                     'default_value' => $i === 0 ? '1' : '0',
-                    'quantity' => $product['quantity'],
+                    'quantity' => $value['quantity'],
                     'price' => $price,
                     'discount' => array()
                 );
